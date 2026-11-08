@@ -1,0 +1,17 @@
+{
+  "name": "enterprise-monorepo",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "install:all": "pnpm install",
+    "dev:bff": "pnpm --filter api-gateway-bff dev",
+    "dev:user": "pnpm --filter user-service dev",
+    "build:all": "pnpm -r run build",
+    "lint:all": "pnpm -r run lint"
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "nx": "24.0.5",
+    "typescript": "7.0.2"
+  }
+}

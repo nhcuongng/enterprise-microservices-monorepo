@@ -1,0 +1,74 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  # --- DATABASES ---
+  postgres-user:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secretpassword
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  # postgres-payment:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: payment_db
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: secretpassword
+  #   ports:
+  #     - "5433:5433"
+  #   networks:
+  #     - app-network
+
+  # --- BACKEND SERVICES ---
+  # user-service:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/user-service/Dockerfile
+  #   environment:
+  #     - PORT=3001
+  #     - DB_HOST=postgres-user
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     - postgres-user
+  #   networks:
+  #     - app-network
+
+  # payment-service:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/payment-service/Dockerfile
+  #   environment:
+  #     - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-payment:5432/payment_db
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - postgres-payment
+  #   networks:
+  #     - app-network
+
+  # --- API GATEWAY / BFF ---
+  api-gateway-bff:
+    build:
+      context: .
+      dockerfile: apps/api-gateway-bff/Dockerfile
+    environment:
+      - PORT=4000
+      - USER_SERVICE_URL=http://user-service:3001
+      - PAYMENT_SERVICE_URL=http://payment-service:8080
+    ports:
+      - "4000:4000"
+    # depends_on:
+    #   - user-service
+    #   - payment-service
+    networks:
+      - app-network

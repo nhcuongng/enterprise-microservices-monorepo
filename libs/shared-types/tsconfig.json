@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,          /* Bắt buộc: Sinh ra file .d.ts để các service khác nhận diện kiểu dữ liệu */
+    "emitDeclarationOnly": false,
+    "outDir": "./dist",           /* Thư mục chứa kết quả build */
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
+}
